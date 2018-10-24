@@ -1,0 +1,14 @@
+## Front-End
+# https://angular.io/
+# https://material.angular.io/
+
+## Back-End
+# https://www.django-rest-framework.org/
+# https://docs.python.org/3/library/csv.html
+# https://github.com/python/cpython/blob/master/Lib/csv.py
+# https://docs.python.org/3/library/csv.html
+
+# pip install ...
+djangorestframework
+markdown       # Markdown support for the browsable API.
+django-filter  # Filtering support

@@ -1,0 +1,14 @@
+Enunciado:
+La idea es hacer una aplicacion simple para gestionar una biblioteca. Se dispone de un CSV con los libros de los que dispone la biblioteca (adjunto, volcarlo en la bbdd que se cree). 
+
+La web debe disponer de login y permisos por usuario, y estar hecha en django. Se valorará un front amigable en JS, pero la prioridad es el backend (sugerencia: implementar una API y consumirlo desde html+js) 
+
+Las funcionalidades deben ser las siguientes: 
+- Agregar libros a la biblioteca (solo usuarios admin). No hay libros repetidos. 
+- Eliminar libros de la biblioteca (solo usuarios admin) 
+- Listar libros de la biblioteca (diferenciando prestados y no prestados) 
+- Prestar libros: un libro se presta (por un usuario admin) durante un maximo de 15 dias a un usuario de la biblioteca (no admin). 
+- Devolver libros. Los libros prestados se devuelven y vuelven a formar parte del catalogo (prestables) de la biblioteca 
+- Alertar de libros caducados: debe proporcionarse una pantalla con todos los libros que esten prestados desde hace mas de 15 dias, junto con el email del usuario que los tiene(moroso) 
+
+- Los campos relevantes de los libros son su titulo, su autor y un codigo ISBN. Los campos de los usuarios son login/email, password y numero de socio (autoincremental).
