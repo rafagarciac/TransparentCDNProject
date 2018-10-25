@@ -19,12 +19,7 @@ from django.urls import path
 from django.conf.urls import url, include
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers, viewsets, routers
-
-class BookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Book
-        fields = ('ISBNCode', 'title', 'author')
-
+from book.serializers import BookSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
@@ -67,6 +62,8 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # Admin Dashboard path
-    path('admin/', admin.site.urls)
-    # path('', include('books.urls')),
+    path('admin/', admin.site.urls),
+    # Applications urls
+    path('', include('book.urls')),
+    path('', include('user.urls')),
 ]
