@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from book.models import Book
-from book.serializers import BookSerializer
+from book.serializers import BookSerializer, BookBorrowedSerializer
 
 # Create your views here.
 @api_view(['GET', 'POST'])
@@ -50,3 +50,4 @@ def books_detail(request, id):
     elif request.method == 'DELETE':
         book.delete()
         return HttpResponse(status=204)
+

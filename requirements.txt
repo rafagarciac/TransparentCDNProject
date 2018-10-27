@@ -12,3 +12,4 @@
 djangorestframework
 markdown       # Markdown support for the browsable API.
 django-filter  # Filtering support
+django-cors-headers # Django app for handling the server headers required for Cross-Origin Resource Sharing (CORS)

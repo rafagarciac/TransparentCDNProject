@@ -1,0 +1,13 @@
+<mat-list>
+  <h3 mat-subheader style="float: left;">Books List</h3>
+  <button style="float: right;" mat-raised-button (click)="openDialog()"><mat-icon style="color: green;">add</mat-icon> Add Book</button>
+  <br><br><br>
+  <!-- Books List -->
+  <mat-list-item *ngFor="let book of books" class="hover-color">
+    <mat-icon (click)="openDetailDialog(book['id'], book['ISBNCode'], book['title'], book['author'])" class="pointer" mat-list-icon>book</mat-icon>
+    <h3 mat-line> Title: {{book['title']}} </h3>
+    <h5 mat-line> Author: {{book['author']}} </h5>
+    <p mat-line> ISBN Code: {{book['ISBNCode']}} </p>
+    <button mat-button (click)="openDeleteDialog(book['id'])"><mat-icon style="color: red;">delete</mat-icon></button>
+    <mat-divider></mat-divider>
+  </mat-list-item>

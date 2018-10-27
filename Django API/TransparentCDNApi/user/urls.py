@@ -2,6 +2,10 @@ from django.urls import path
 from user import views
 
 urlpatterns = [
-    # path('users/', views.users_list),
-    # path('users/<int:n_socio>/', views.users_detail),
+    # User urls
+    path('users/', views.users_list),
+    path('users/<int:n_socio>/', views.users_detail),
+    # Role urls
+    path('roles/', views.roles_list),
+    path('roles/<int:id>/', views.roles_detail),
 ]
