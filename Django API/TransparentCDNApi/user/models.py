@@ -7,9 +7,9 @@ class Role(models.Model):
     DEFAULT_PERMISION = 1
     PERMISSIONS = (
         ('ADMIN', 'Administrator'),
-        ('NORMAL', 'Normal User')
+        ('USER', 'User')
     )
-    permision = models.CharField(max_length=10, choices=PERMISSIONS, default='NORMAL') 
+    permision = models.CharField(max_length=10, choices=PERMISSIONS, default='USER') 
 
 class User(models.Model):
     n_socio = models.AutoField(primary_key=True)

@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from book.models import Book
-from book.serializers import BookSerializer, BookBorrowedSerializer
+from book.serializers import BookSerializer
 
 # Create your views here.
 @api_view(['GET', 'POST'])
@@ -51,3 +51,12 @@ def books_detail(request, id):
         book.delete()
         return HttpResponse(status=204)
 
+@api_view(['GET'])
+def books_borrowed(request):
+    """
+    Retrieve, update or delete a code book.
+    """
+    if request.method == 'GET':
+        books = Book.objects.all().exclude(user_borrowed=0).exclude(user_borrowed__isnull=True)
+        serializer = BookSerializer(books, many=True)
+        return JsonResponse(serializer.data, safe=False)

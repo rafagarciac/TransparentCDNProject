@@ -1,2 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.success-snackbar {
+  background: rgb(45, 172, 45);
+}
+
+.error-snackbar {
+  background: rgb(219, 20, 30);
+}
+
+.success-snackbar button {
+  color: white;
+}
+
+.error-snackbar button{
+  color: white;
+}
+

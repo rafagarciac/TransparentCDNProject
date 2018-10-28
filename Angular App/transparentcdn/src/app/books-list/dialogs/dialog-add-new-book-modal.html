@@ -1,21 +1,25 @@
-<h1 mat-dialog-title *ngIf="data.id == undefined"><mat-icon>book</mat-icon> Add new Book</h1>
-<h1 mat-dialog-title *ngIf="data.id"><mat-icon>book</mat-icon> Detail Book</h1>
+<h1 mat-dialog-title *ngIf="data.id == undefined">
+    <mat-icon>book</mat-icon> Add new Book
+</h1>
+<h1 mat-dialog-title *ngIf="data.id">
+    <mat-icon>book</mat-icon> Detail Book
+</h1>
 <div mat-dialog-content>
-  <mat-form-field *ngIf="data.id" >
-      <input matInput [(ngModel)]="data.id" placeholder="Id" required>
-  </mat-form-field>
-  <mat-form-field hintLabel="Max 17 characters">
-      <input matInput [(ngModel)]="data.ISBNCode" #input maxlength="17" placeholder="ISBNCode" required>
-      <mat-hint align="end">{{input.value?.length || 0}}/17</mat-hint>
-  </mat-form-field>
-  <mat-form-field>
-      <input matInput placeholder="Title" [(ngModel)]="data.title" required>
-  </mat-form-field>
-  <mat-form-field>
-      <input matInput placeholder="Author" [(ngModel)]="data.author" required>
-  </mat-form-field>
+    <mat-form-field *ngIf="data.id">
+        <input matInput [(ngModel)]="data.id" placeholder="Id" required>
+    </mat-form-field>
+    <mat-form-field hintLabel="Max 17 characters">
+        <input matInput [(ngModel)]="data.ISBNCode" #input maxlength="17" placeholder="ISBNCode" required>
+        <mat-hint align="end">{{input.value?.length || 0}}/17</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Title" [(ngModel)]="data.title" required>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Author" [(ngModel)]="data.author" required>
+    </mat-form-field>
 </div>
 <div mat-dialog-actions class="justify-content: space-between;">
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button [hidden]="data.id !== undefined" mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button [hidden]="data.id !== undefined" mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
 </div>

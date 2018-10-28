@@ -1,5 +1,7 @@
-<h1 mat-dialog-title><mat-icon>book</mat-icon>Are you sure to delete the {{data.id}} - Book ?? </h1>
+<h1 mat-dialog-title>
+    <mat-icon>book</mat-icon>Are you sure to delete the {{data.id}} - Book ??
+</h1>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button  [mat-dialog-close]="data.id" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data.id" cdkFocusInitial>Ok</button>
 </div>

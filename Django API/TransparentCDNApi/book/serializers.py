@@ -1,18 +1,26 @@
 from rest_framework import serializers
 from book.models import Book
 from user.serializers import UserSerializer
+from rest_framework import status
+from rest_framework.response import Response
 
-class BookSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    ISBNCode = serializers.CharField(required=True, max_length=17, trim_whitespace = True, allow_null=False)
-    title = serializers.CharField(required=True, max_length=200, trim_whitespace = False, allow_null=False)
-    author = serializers.CharField(required=False, max_length=100, trim_whitespace = False, allow_null=True)
-    user_borrowed = UserSerializer(read_only=True, required=False)
+
+
+class BookSerializer(serializers.ModelSerializer):
+    lookup_field='user_borrowed'
+    class Meta:
+        model = Book
+        fields = ('id', 'ISBNCode', 'title', 'author', 'user_borrowed')
 
     def create(self, validated_data):
         """
         Create and return a new `Book` instance, given the validated data.
         """
+        # Verify repeat Book
+        for book in Book.objects.all():
+            if book.ISBNCode == validated_data['ISBNCode']:
+                return Response(status=status.HTTP_400_BAD_REQUEST) 
+
         return Book.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
@@ -25,9 +33,5 @@ class BookSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class BookBorrowedSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    ISBNCode = serializers.CharField(required=True, max_length=17, trim_whitespace = True, allow_null=False)
-    title = serializers.CharField(required=True, max_length=200, trim_whitespace = False, allow_null=False)
-    author = serializers.CharField(required=False, max_length=100, trim_whitespace = False, allow_null=True)
-    user_borrowed = UserSerializer()
+class BookReadSerializer(BookSerializer):
+    user_borrowed = UserSerializer(read_only=True)

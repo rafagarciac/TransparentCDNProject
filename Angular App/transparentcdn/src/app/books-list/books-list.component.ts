@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ApiService } from '../api.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { Identifiers } from '@angular/compiler';
-
+import { Router } from '@angular/router';
 
 export interface DialogData {
   id: number;
@@ -19,15 +18,32 @@ export interface DialogData {
 export class BooksListComponent implements OnInit {
   private books:  Array<object> = [];
 
+  // Books
   id: number;
   ISBNCode: string;
   title: string;
   author: string;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) { }
+  // User
+  permision: string;
+  isAdmin: boolean;
+
+  constructor(private apiService: ApiService, public dialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
     this.getBooksList();
+    this.permision = localStorage.getItem('permision');
+    this.isAdmin = this.isUserorAdmin();
+  }
+
+  logout(): void {
+    localStorage.removeItem('permision');
+    // localStorage.clear();
+    this.router.navigateByUrl('login');
+  }
+
+  isUserorAdmin(): boolean {
+    return this.permision.toUpperCase() === 'ADMIN' ? true : false;
   }
 
   public getBooksList () {

@@ -45,6 +45,25 @@ def users_detail(request, n_socio):
         user.delete()
         return HttpResponse(status=204)
 
+@api_view(['POST'])
+def user_login(request):
+    """
+    Login Post Request:
+        @param: user
+        @param: password 
+    """
+    if request.method == 'POST':
+        try:
+            user = User.objects.get(email=request.data['email'])
+        except (User.DoesNotExist):
+            return JsonResponse({"message": "The email doesn't exist."}, status=500, safe=False)    # status = 400 ?
+
+        if request.data['password'] != user.password:
+            return JsonResponse({"message": "Password incorret!"}, status=500, safe=False)
+        
+        serializer = UserSerializer(user, many=False)
+        return JsonResponse(serializer.data, status=201, safe=False)
+
 # Role Views
 @api_view(['GET', 'POST'])
 def roles_list(request):

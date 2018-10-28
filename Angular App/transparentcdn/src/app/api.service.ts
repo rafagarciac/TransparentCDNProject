@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 
@@ -10,13 +10,37 @@ const httpOptions = {
   })
 };
 
+export interface IUser {
+  n_socio: string;
+  email: string;
+  password: string;
+  user_permision: {
+    id: string;
+    permision: string;
+  };
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class ApiService {
+
+  // Declarations
   API_URL = 'http://127.0.0.1:8000/';
+  loggedInStatus = false;
+
   constructor(private httpClient: HttpClient) { }
+
+  // Provide Routing Protection
+  get isLoggedIn() {
+    return this.loggedInStatus;
+  }
+
+  setLoggedIn(value: boolean) {
+    this.loggedInStatus = value;
+  }
 
   // Return a Books List
   getBooksList() {
@@ -48,5 +72,18 @@ export class ApiService {
             }
         );
   }
+
+    // Delete Book
+    login(data): Observable<HttpResponse<IUser>> {
+      const httpHeaders = new HttpHeaders({
+        'Content-Type' : 'application/json'
+      });
+
+      return this.httpClient.post<IUser>(`${this.API_URL}login/`, data,
+            {
+              headers: httpHeaders,
+              observe: 'response'
+            });
+    }
 
 }

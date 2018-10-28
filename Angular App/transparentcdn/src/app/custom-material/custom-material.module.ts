@@ -15,6 +15,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material';
 
 
 
@@ -37,7 +38,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
   ],
   exports: [
     MatButtonModule,
@@ -55,7 +57,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
   ],
   declarations: []
 })
