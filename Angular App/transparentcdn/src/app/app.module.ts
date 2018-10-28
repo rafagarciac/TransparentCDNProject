@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { BooksListComponent } from './books-list/books-list.component';
-import { DialogAddNewBook, DialogRemoveBook } from './books-list/books-list.component';
+import { DialogAddNewBook, DialogRemoveBook, DialogBorrowBook } from './books-list/books-list.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { ApiService } from './api.service';
@@ -20,6 +20,7 @@ import { ApiGuard } from './api.guard';
     BooksListComponent,
     DialogAddNewBook,
     DialogRemoveBook,
+    DialogBorrowBook,
     LoginComponent,
   ],
   imports: [
@@ -33,6 +34,7 @@ import { ApiGuard } from './api.guard';
   entryComponents: [
     DialogAddNewBook,
     DialogRemoveBook,
+    DialogBorrowBook
   ],
   providers: [ApiService, ApiGuard],
   bootstrap: [AppComponent]

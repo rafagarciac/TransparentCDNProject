@@ -17,9 +17,14 @@
                 <mat-error *ngIf="emailFormControl.hasError('required')">
                     Email is <strong>required</strong>
                 </mat-error>
+                <mat-icon matSuffix>email</mat-icon>
             </mat-form-field><br><br>
             <mat-form-field class="example-full-width">
                 <input matInput placeholder="Password" [(ngModel)]="password" type="password" name="password" required>
+                <mat-icon matSuffix>lock_open</mat-icon>
+                <mat-error>
+                  Password is <strong>required</strong>
+                </mat-error>
             </mat-form-field>
         </form>
         <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>

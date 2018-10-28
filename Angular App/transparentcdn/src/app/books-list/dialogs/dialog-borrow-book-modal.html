@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>
+    <mat-icon>book</mat-icon> Borrow Book ({{data.bookid}}) to User:
+</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <mat-select placeholder="Select User" [(ngModel)]="data.n_socio">
+          <mat-option value="null">None</mat-option>
+          <mat-option *ngFor="let user of data.users" value="{{user.n_socio}}">{{user.email}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<p>You selected User with Nº Socio: {{data.n_socio}}</p>
+<div mat-dialog-actions class="justify-content: space-between;">
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

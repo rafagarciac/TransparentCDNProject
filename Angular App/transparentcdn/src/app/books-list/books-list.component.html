@@ -3,25 +3,114 @@
         <span>TransparentCDN App</span>
         <span class="example-spacer"></span>
         <button mat-button>
-            <mat-icon class="example-icon" (click)="logout()">exit_to_app</mat-icon>
+            <mat-icon matTooltip="Logout" class="example-icon" (click)="logout()">exit_to_app</mat-icon>
         </button>
     </mat-toolbar-row>
 </mat-toolbar>
-<mat-list>
-    <h3 mat-subheader style="float: left;">Books List</h3>
-    <button *ngIf="isAdmin" style="float: right;" mat-raised-button (click)="openDialog()">
-        <mat-icon style="color: green;">add</mat-icon> Add Book
-    </button>
-    <br><br><br>
-    <!-- Books List -->
-    <mat-list-item *ngFor="let book of books" class="hover-color">
-        <mat-icon (click)="openDetailDialog(book['id'], book['ISBNCode'], book['title'], book['author'])" class="pointer"
-            mat-list-icon>book</mat-icon>
-        <h3 mat-line> Title: {{book['title']}} </h3>
-        <h5 mat-line> Author: {{book['author']}} </h5>
-        <p mat-line> ISBN Code: {{book['ISBNCode']}} </p>
-        <button *ngIf="isAdmin" mat-button (click)="openDeleteDialog(book['id'])">
-            <mat-icon style="color: red;">delete</mat-icon>
-        </button>
-        <mat-divider></mat-divider>
-    </mat-list-item>
+<!-- Mat Tabs with List contents -->
+<mat-tab-group [color]="primary" [backgroundColor]="primary">
+    <mat-tab label="Books">
+        <mat-list>
+            <h3 mat-subheader style="float: left;">All Books List</h3>
+            <button *ngIf="isAdmin" style="float: right;" mat-raised-button (click)="openCreateDialog()">
+                <mat-icon style="color: green;">add</mat-icon> Add Book
+            </button>
+            <br><br><br>
+            <!-- Books List -->
+            <mat-list-item *ngFor="let book of books" class="hover-color">
+                <mat-icon (click)="openDetailDialog(book['id'], book['ISBNCode'], book['title'], book['author'])" class="pointer" matTooltip="Book Detail"
+                    mat-list-icon>book</mat-icon>
+                <h3 mat-line> Title: {{book['title']}} </h3>
+                <h5 mat-line> Author: {{book['author']}} </h5>
+                <p mat-line> ISBN Code: {{book['ISBNCode']}} </p>
+                <button *ngIf="isAdmin" matTooltip="Delete" mat-button (click)="openDeleteDialog(book['id'], book['title'])">
+                    <mat-icon style="color: red;">delete</mat-icon>
+                </button>
+                <mat-divider></mat-divider>
+            </mat-list-item>
+        </mat-list>
+    </mat-tab>
+    <mat-tab label="Borrowed Books" *ngIf="isAdmin">
+        <mat-list>
+            <h3 mat-subheader style="float: left;">Borrowed Books List</h3>
+            <button *ngIf="isAdmin" style="float: right;" mat-raised-button (click)="openCreateDialog()">
+                <mat-icon style="color: green;">add</mat-icon> Add Book
+            </button>
+            <br><br><br>
+            <!-- Books List -->
+            <mat-list-item *ngFor="let book of borrowedBooks" class="hover-color">
+                <mat-icon (click)="openDetailDialog(book['id'], book['ISBNCode'], book['title'], book['author'])" class="pointer" matTooltip="Book Detail"
+                    mat-list-icon>book</mat-icon>
+                <h3 mat-line> Title: {{book['title']}} </h3>
+                <h5 mat-line> Author: {{book['author']}} </h5>
+                <p mat-line> ISBN Code: {{book['ISBNCode']}} </p>
+                <mat-divider [vertical]="true"></mat-divider>
+                <h3 mat-subheader> Nº Socio: {{book['user_borrowed']['n_socio']}}         </h3>
+                <h5 mat-subheader> Email: {{book['user_borrowed']['email']}} </h5>
+                <p mat-subheader> Permision: {{book['user_borrowed']['user_permision']['permision']}} </p>
+                <button *ngIf="isAdmin" matTooltip="Give Back" mat-button (click)="openUnBorrowDialog(book['id'])">
+                    <mat-icon style="color: rgb(60, 111, 250);">undo</mat-icon>
+                </button>
+                <button *ngIf="isAdmin" mat-button (click)="openDeleteDialog(book['id'], book['title'])">
+                    <mat-icon style="color: red;">delete</mat-icon>
+                </button>
+                <mat-divider></mat-divider>
+            </mat-list-item>
+        </mat-list>
+    </mat-tab>
+    <mat-tab label="Not Borrowed Books" *ngIf="isAdmin">
+        <mat-list>
+            <h3 mat-subheader style="float: left;">Not Borrowed Books List</h3>
+            <button *ngIf="isAdmin" style="float: right;" mat-raised-button (click)="openCreateDialog()">
+                <mat-icon style="color: green;">add</mat-icon> Add Book
+            </button>
+            <br><br><br>
+            <!-- Books List -->
+            <mat-list-item *ngFor="let book of notBorrowedBooks" class="hover-color">
+                <mat-icon (click)="openDetailDialog(book['id'], book['ISBNCode'], book['title'], book['author'])" class="pointer" matTooltip="Book Detail"
+                    mat-list-icon>book</mat-icon>
+                <h3 mat-line> Title: {{book['title']}} </h3>
+                <h5 mat-line> Author: {{book['author']}} </h5>
+                <p mat-line> ISBN Code: {{book['ISBNCode']}} </p>
+                <button *ngIf="isAdmin" matTooltip="Borrow" mat-button (click)="openBorrowDialog(book['id'])">
+                    <mat-icon style="color: rgb(60, 111, 250);">pan_tool</mat-icon>
+                </button>
+                <button *ngIf="isAdmin" mat-button (click)="openDeleteDialog(book['id'], book['title'])">
+                    <mat-icon style="color: red;">delete</mat-icon>
+                </button>
+                <mat-divider></mat-divider>
+            </mat-list-item>
+        </mat-list>
+    </mat-tab>
+    <mat-tab *ngIf="isAdmin">
+        <ng-template mat-tab-label>
+          <mat-icon style="color: rgb(252, 193, 0);">warning</mat-icon>
+          MOROSOS
+        </ng-template>
+        <mat-list>
+          <h3 mat-subheader style="float: left;">Morosos Books List</h3>
+          <button *ngIf="isAdmin" style="float: right;" mat-raised-button (click)="openCreateDialog()">
+              <mat-icon style="color: green;">add</mat-icon> Add Book
+          </button>
+          <br><br><br>
+          <!-- Books List -->
+          <p *ngIf="morososBooks == []"> There are not Morosos !! 🎉🎉🎉🎉🎉 </p>
+          <mat-list-item *ngFor="let book of morososBooks" class="hover-color">
+              <mat-icon (click)="openDetailDialog(book['id'], book['ISBNCode'], book['title'], book['author'])" class="pointer" matTooltip="Book Detail"
+                  mat-list-icon>book</mat-icon>
+              <h3 mat-line> Title: {{book['title']}} </h3>
+              <h5 mat-line> Author: {{book['author']}} </h5>
+              <p mat-line> ISBN Code: {{book['ISBNCode']}} </p>
+              <p mat-line><strong> MOROSO: {{book['user_borrowed']['email']}} </strong></p>
+              <button *ngIf="isAdmin" matTooltip="Give Back" mat-button (click)="openUnBorrowDialog(book['id'])">
+                <mat-icon style="color: rgb(60, 111, 250);">undo</mat-icon>
+              </button>
+              <button *ngIf="isAdmin" mat-button (click)="openDeleteDialog(book['id'], book['title'])">
+                  <mat-icon style="color: red;">delete</mat-icon>
+              </button>
+              <mat-divider></mat-divider>
+          </mat-list-item>
+      </mat-list>
+
+      </mat-tab>
+</mat-tab-group>

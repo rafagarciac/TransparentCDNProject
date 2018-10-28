@@ -16,7 +16,11 @@ export interface DialogData {
   styleUrls: ['./books-list.component.css']
 })
 export class BooksListComponent implements OnInit {
-  private books:  Array<object> = [];
+  private books: Array<object> = [];
+  private borrowedBooks: Array<object> = [];
+  private notBorrowedBooks: Array<object> = [];
+  private morososBooks: Array<object> = [];
+  private users: Array<object> = [];
 
   // Books
   id: number;
@@ -32,12 +36,17 @@ export class BooksListComponent implements OnInit {
 
   ngOnInit() {
     this.getBooksList();
+    this.getBorrowedBooksList();
+    this.getNotBorrowedBooksList();
+    this.getMorososBooksList();
+    this.getUsersList();
     this.permision = localStorage.getItem('permision');
     this.isAdmin = this.isUserorAdmin();
   }
 
   logout(): void {
     localStorage.removeItem('permision');
+    localStorage.removeItem('loggedIn');
     // localStorage.clear();
     this.router.navigateByUrl('login');
   }
@@ -52,7 +61,31 @@ export class BooksListComponent implements OnInit {
     });
   }
 
-  openDialog(): void {
+  public getBorrowedBooksList () {
+    this.apiService.getBorrowedBooksList().subscribe((data: Array<object>) => {
+      this.borrowedBooks = data;
+    });
+  }
+
+  public getNotBorrowedBooksList () {
+    this.apiService.getNotBorrowedBooksList().subscribe((data: Array<object>) => {
+      this.notBorrowedBooks = data;
+    });
+  }
+
+  public getMorososBooksList () {
+    this.apiService.getMorososBooksList().subscribe((data: Array<object>) => {
+      this.morososBooks = data;
+    });
+  }
+
+  public getUsersList () {
+    this.apiService.getUsers().subscribe((data: Array<object>) => {
+      this.users = data;
+    });
+  }
+
+  openCreateDialog(): void {
     const dialogRef = this.dialog.open(DialogAddNewBook, {
       width: '250px',
       data: {ISBNCode: this.ISBNCode, title: this.title, author: this.author}
@@ -66,15 +99,46 @@ export class BooksListComponent implements OnInit {
     });
   }
 
-  openDeleteDialog(_id): void {
+  openDeleteDialog(_id, _title): void {
     const dialogRef = this.dialog.open(DialogRemoveBook, {
       width: '500px',
-      data: {id: _id}
+      data: {bookid: _id, title: _title}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
+        delete result.title;
         this.apiService.deleteBook(result);
+        location.reload();
+      }
+    });
+  }
+
+  openBorrowDialog(_id): void {
+    const dialogRef = this.dialog.open(DialogBorrowBook, {
+      width: '500px',
+      data: {bookid: _id, users: this.users}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        delete result.users;  // Remove the users from the json to POST
+        this.apiService.borrowBookToUser(result);
+        location.reload();
+      }
+    });
+  }
+
+  openUnBorrowDialog(_id): void {
+    const dialogRef = this.dialog.open(DialogRemoveBook, {
+      width: '500px',
+      data: {bookid: _id}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        result = {'bookid': result.toString()};
+        this.apiService.unborrowBookToUser(result);
         location.reload();
       }
     });
@@ -116,6 +180,21 @@ export class DialogRemoveBook {
 
   constructor(
     public dialogRef: MatDialogRef<DialogRemoveBook>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'dialog-borrow-book-modal',
+  templateUrl: './dialogs/dialog-borrow-book-modal.html',
+})
+export class DialogBorrowBook {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogBorrowBook>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   onNoClick(): void {

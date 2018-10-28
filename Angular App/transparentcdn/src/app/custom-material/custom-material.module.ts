@@ -16,6 +16,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatSelectModule} from '@angular/material/select';
 
 
 
@@ -39,7 +41,9 @@ import {MatSnackBarModule} from '@angular/material';
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatSelectModule
   ],
   exports: [
     MatButtonModule,
@@ -58,7 +62,9 @@ import {MatSnackBarModule} from '@angular/material';
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatSelectModule
   ],
   declarations: []
 })

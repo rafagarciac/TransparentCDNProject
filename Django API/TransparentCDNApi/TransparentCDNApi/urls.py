@@ -23,10 +23,12 @@ from book.serializers import BookSerializer, BookReadSerializer
 from user.serializers import UserSerializer, RoleSerializer
 from book.models import Book
 from user.models import User, Role
+import book.urls
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    roleToExcludeAdmin = Role.objects.all().get(permision="ADMIN")
+    queryset = User.objects.all().exclude(user_permision=roleToExcludeAdmin)
     serializer_class = UserSerializer
 
 class RoleViewSet(viewsets.ModelViewSet):
@@ -51,14 +53,6 @@ class BookViewSet(viewsets.ModelViewSet):
             # in multiple tables, only use it when necessary
             return BookReadSerializer
         return BookSerializer
-
-class BookBorrowedViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all().exclude(user_borrowed=0).exclude(user_borrowed__isnull=True)
-    serializer_class = BookReadSerializer
-
-class BookNotBorrowedViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all().filter(user_borrowed=0).filter(user_borrowed__isnull=False)
-    serializer_class = BookReadSerializer
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -89,8 +83,6 @@ router.register(r'groups', GroupViewSet)
 router.register(r'books', BookViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'roles', RoleViewSet)
-router.register(r'borrowed', BookBorrowedViewSet)
-router.register(r'notborrowed', BookNotBorrowedViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -98,8 +90,10 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # Admin Dashboard path
-    path('admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls), 
     # Applications urls
-    path('books/', include('book.urls')),
-    path('', include('user.urls')),
+    url(r'^books/', include((book.urls, 'book'), namespace='books')),
+    url(r'^', include('user.urls')),    # login/  users/  roles/
 ]
+
+# urlpatterns += router.urls

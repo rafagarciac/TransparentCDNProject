@@ -29,22 +29,37 @@ export class ApiService {
 
   // Declarations
   API_URL = 'http://127.0.0.1:8000/';
-  loggedInStatus = false;
+  loggedInStatus = JSON.parse(localStorage.getItem('loggedIn')) || false;
 
   constructor(private httpClient: HttpClient) { }
 
   // Provide Routing Protection
   get isLoggedIn() {
-    return this.loggedInStatus;
+    return JSON.parse(localStorage.getItem('loggedIn')) || this.loggedInStatus.toString();
   }
 
   setLoggedIn(value: boolean) {
-    this.loggedInStatus = value;
+    localStorage.setItem('loggedIn', 'true');
+  }
+
+  // Return All Books List
+  getBooksList() {
+    return this.httpClient.get(`${this.API_URL}books/`);
   }
 
   // Return a Books List
-  getBooksList() {
-    return this.httpClient.get(`${this.API_URL}books/`);
+  getBorrowedBooksList() {
+    return this.httpClient.get(`${this.API_URL}books/borrowed`);
+  }
+
+  // Return a Books List
+  getNotBorrowedBooksList() {
+    return this.httpClient.get(`${this.API_URL}books/notborrowed`);
+  }
+
+  // Return a Morosos Books List
+  getMorososBooksList() {
+    return this.httpClient.get(`${this.API_URL}books/morosos`);
   }
 
   // Add new Book
@@ -62,7 +77,7 @@ export class ApiService {
 
   // Delete Book
   deleteBook(id) {
-    return this.httpClient.delete(`${this.API_URL}books/${id}/`)
+    return this.httpClient.delete(`${this.API_URL}books/${id}`)
         .subscribe(
             data => {
                 console.log('DELETE Request is successful ', data);
@@ -73,17 +88,53 @@ export class ApiService {
         );
   }
 
-    // Delete Book
-    login(data): Observable<HttpResponse<IUser>> {
-      const httpHeaders = new HttpHeaders({
-        'Content-Type' : 'application/json'
-      });
+  // Get All Users
+  getUsers() {
+    return this.httpClient.get(`${this.API_URL}users/`);
+  }
 
-      return this.httpClient.post<IUser>(`${this.API_URL}login/`, data,
-            {
-              headers: httpHeaders,
-              observe: 'response'
-            });
+  // Get User by n_socio
+  getUser(n_socio: string) {
+    return this.httpClient.get(`${this.API_URL}users/${n_socio}`);
+  }
+
+  // Borrow Book to User (Only Admin Users)
+  borrowBookToUser(data) {
+    return this.httpClient.post(`${this.API_URL}books/borrowed`, data, httpOptions)
+      .subscribe(
+          _data => {
+              console.log('POST Request is successful ', _data);
+          },
+          error => {
+              console.log('Error', error);
+          }
+      );
+  }
+
+    // Unborrowed Book from User (Only Admin Users)
+    unborrowBookToUser(data) {
+      return this.httpClient.post(`${this.API_URL}books/notborrowed`, data, httpOptions)
+        .subscribe(
+            _data => {
+                console.log('POST Request is successful ', _data);
+            },
+            error => {
+                console.log('Error', error);
+            }
+        );
     }
+
+
+  // Login!
+  login(data): Observable<HttpResponse<IUser>> {
+    const httpHeaders = new HttpHeaders({
+      'Content-Type' : 'application/json'
+    });
+    return this.httpClient.post<IUser>(`${this.API_URL}login/`, data,
+          {
+            headers: httpHeaders,
+            observe: 'response'
+          });
+  }
 
 }
