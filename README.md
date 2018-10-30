@@ -1,4 +1,4 @@
-# TrasnparentCDNProject
+# TransparentCDNProject
 
 ## Getting Started
 ---
